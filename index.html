@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIT PUNE's Laundry Tracking App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/ait-pune-logo.png" alt="AIT PUNE Logo" class="nav-logo" onerror="this.src='assets/ait-pune-logo.svg'">
+                    <h1 class="nav-title">
+                        <i class="fas fa-tshirt"></i>
+                        AIT PUNE's Laundry Tracking App
+                    </h1>
+                </div>
+                <div class="nav-stats">
+                    <span class="stat-item">
+                        <i class="fas fa-play-circle"></i>
+                        Active: <span id="active-count">0</span>
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-check-circle"></i>
+                        Today: <span id="today-count">0</span>
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Add New Load Section -->
+        <section class="add-load-section">
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Start New Load</h2>
+                <form id="add-load-form" class="load-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="load-type">Load Type</label>
+                            <select id="load-type" required>
+                                <option value="">Select type...</option>
+                                <option value="washing">Washing</option>
+                                <option value="drying">Drying</option>
+                                <option value="both">Wash & Dry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="load-location">Hostel Location</label>
+                            <select id="load-location" required>
+                                <option value="">Select hostel...</option>
+                                <option value="ramanujan">Ramanujan Hostel</option>
+                                <option value="apj">APJ Hostel</option>
+                                <option value="vishveswariya">Vishveswariya Hostel</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="load-category">Category</label>
+                            <select id="load-category" required>
+                                <option value="">Select category...</option>
+                                <option value="whites">Whites</option>
+                                <option value="colors">Colors</option>
+                                <option value="darks">Darks</option>
+                                <option value="delicates">Delicates</option>
+                                <option value="bedding">Bedding</option>
+                                <option value="towels">Towels</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (minutes)</label>
+                            <input type="number" id="duration" min="1" max="300" value="30" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="load-notes">Notes (optional)</label>
+                            <input type="text" id="load-notes" placeholder="e.g., Heavy stains, extra rinse needed">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Start Load
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Active Loads Section -->
+        <section class="active-loads-section">
+            <div class="card">
+                <h2><i class="fas fa-clock"></i> Active Loads</h2>
+                <div id="active-loads-container" class="loads-container">
+                    <div class="empty-state" id="no-active-loads">
+                        <i class="fas fa-clock"></i>
+                        <p>No active loads</p>
+                        <small>Start a new load to see it here</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent History Section -->
+        <section class="history-section">
+            <div class="card">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Recent History</h2>
+                    <div class="section-actions">
+                        <button id="clear-history-btn" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i>
+                            Clear History
+                        </button>
+                        <button id="export-data-btn" class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+                <div id="history-container" class="loads-container">
+                    <div class="empty-state" id="no-history">
+                        <i class="fas fa-history"></i>
+                        <p>No completed loads yet</p>
+                        <small>Completed loads will appear here</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="card">
+                <h2><i class="fas fa-chart-bar"></i> Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-tshirt"></i>
+                        <div class="stat-content">
+                            <h3 id="total-loads">0</h3>
+                            <p>Total Loads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-content">
+                            <h3 id="avg-duration">0m</h3>
+                            <p>Avg Duration</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-day"></i>
+                        <div class="stat-content">
+                            <h3 id="this-week">0</h3>
+                            <p>This Week</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-medal"></i>
+                        <div class="stat-content">
+                            <h3 id="most-common">-</h3>
+                            <p>Most Common</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Locations Section -->
+        <section class="locations-section">
+            <div class="card">
+                <h2><i class="fas fa-map-marker-alt"></i> Upcoming Hostel Locations</h2>
+                <div class="locations-grid">
+                    <div class="location-card coming-soon">
+                        <div class="location-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="location-info">
+                            <h3>Ramanujan Hostel</h3>
+                            <p class="location-status">Coming Soon</p>
+                            <p class="location-description">Advanced laundry tracking for Ramanujan Hostel residents</p>
+                        </div>
+                        <div class="location-features">
+                            <span class="feature-tag"><i class="fas fa-wifi"></i> Smart Machines</span>
+                            <span class="feature-tag"><i class="fas fa-bell"></i> Push Notifications</span>
+                            <span class="feature-tag"><i class="fas fa-calendar"></i> Booking System</span>
+                        </div>
+                    </div>
+                    <div class="location-card coming-soon">
+                        <div class="location-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="location-info">
+                            <h3>APJ Hostel</h3>
+                            <p class="location-status">Coming Soon</p>
+                            <p class="location-description">Seamless laundry management for APJ Hostel students</p>
+                        </div>
+                        <div class="location-features">
+                            <span class="feature-tag"><i class="fas fa-wifi"></i> Smart Machines</span>
+                            <span class="feature-tag"><i class="fas fa-bell"></i> Push Notifications</span>
+                            <span class="feature-tag"><i class="fas fa-calendar"></i> Booking System</span>
+                        </div>
+                    </div>
+                    <div class="location-card coming-soon">
+                        <div class="location-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="location-info">
+                            <h3>Vishveswariya Hostel</h3>
+                            <p class="location-status">Coming Soon</p>
+                            <p class="location-description">Modern laundry solutions for Vishveswariya Hostel</p>
+                        </div>
+                        <div class="location-features">
+                            <span class="feature-tag"><i class="fas fa-wifi"></i> Smart Machines</span>
+                            <span class="feature-tag"><i class="fas fa-bell"></i> Push Notifications</span>
+                            <span class="feature-tag"><i class="fas fa-calendar"></i> Booking System</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="locations-footer">
+                    <p><i class="fas fa-info-circle"></i> More hostel locations will be added based on student demand and feedback.</p>
+                    <button id="notify-me-btn" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        Notify Me When Available
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Load Item Template -->
+    <template id="load-item-template">
+        <div class="load-item" data-load-id="">
+            <div class="load-header">
+                <div class="load-info">
+                    <h3 class="load-title">
+                        <i class="fas fa-tshirt"></i>
+                        <span class="load-type"></span>
+                        <span class="load-category"></span>
+                        <span class="load-location"></span>
+                    </h3>
+                    <div class="load-meta">
+                        <span class="load-time"></span>
+                        <span class="load-duration"></span>
+                    </div>
+                </div>
+                <div class="load-status">
+                    <span class="status-badge"></span>
+                    <div class="timer-display">
+                        <span class="time-remaining"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="load-notes"></div>
+            <div class="load-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="load-actions">
+                <button class="btn btn-small btn-success complete-btn">
+                    <i class="fas fa-check"></i>
+                    Complete
+                </button>
+                <button class="btn btn-small btn-warning pause-btn">
+                    <i class="fas fa-pause"></i>
+                    Pause
+                </button>
+                <button class="btn btn-small btn-danger cancel-btn">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Notification Container -->
+    <div id="notifications-container" class="notifications"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
